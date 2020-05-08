@@ -36,4 +36,27 @@ object MainApp extends App {
   val d = b _
 
   println(d()(3))
+
+  var summation: Int = 0
+  val someNumbers: List[Int] = List(-11, -10, -5, 0, 5, 10)
+  val accSum = summation += (_: Int)
+
+  someNumbers.foreach(accSum)
+  println(summation)
+
+  def filesMatching(matcher: String => Boolean) = {
+    for (file <- filesHere; if matcher(file.getName))
+      yield file
+  }
+
+  def filesEnding(query: String) = {
+    filesMatching(_.endsWith(query))
+  }
+
+  def filesContaining(query: String) =
+    filesMatching(_.contains(query))
+
+  def filesRegex(query: String) =
+    filesMatching(_.matches(query))
+
 }
