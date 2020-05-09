@@ -24,10 +24,10 @@ object MainApp extends App {
   val firstArg = if (args.length > 0) args(0) else ""
 
   val matchResult: Unit = firstArg match {
-    case "salt" => println("pepper")
+    case "salt"  => println("pepper")
     case "chips" => println("salsa")
-    case "eggs" => println("bacon")
-    case _ => println("huh?")
+    case "eggs"  => println("bacon")
+    case _       => println("huh?")
   }
 
   val a = sum _
@@ -58,5 +58,44 @@ object MainApp extends App {
 
   def filesRegex(query: String) =
     filesMatching(_.matches(query))
+
+  abstract class Element {
+    def contents: Array[String]
+    def height: Int = contents.length
+    def width: Int =
+      if (height == 0) 0 else contents(0).length
+  }
+
+  class ArrayElement(override val contents: Array[String]) extends Element
+
+  class LineElement(s: String) extends ArrayElement(Array(s)) {
+    override def width: Int = s.length
+    override def height: Int = 1
+  }
+
+  val ele = new ArrayElement(Array("Hello"))
+
+  ele.contents foreach { x =>
+    println(x)
+    println(x)
+  }
+
+  class UniformElement(
+      ch: Char,
+      override val width: Int,
+      override val height: Int
+  ) extends Element {
+    private val line = ch.toString * width
+    def contents: Array[String] = {
+      Array.fill(height) {
+        line
+      }
+    }
+  }
+
+  val e1: Element = new ArrayElement(Array("hello", "world"))
+  val ae: ArrayElement = new LineElement("hello")
+  val e2: Element = ae
+  val e3: Element = new UniformElement('x', 2, 3)
 
 }
