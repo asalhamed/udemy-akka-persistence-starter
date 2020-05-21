@@ -19,7 +19,6 @@ object MainApp extends App {
     file
   }
 
-  ss foreach println
 
   val firstArg = if (args.length > 0) args(0) else ""
 
@@ -35,11 +34,23 @@ object MainApp extends App {
   val c = b(3)
   val d = b _
 
+  val tp3 = b(3)(2)
+
+  def addThen(x: Int, y: Int)(doThis: Int => Unit) = {
+    doThis(x+y)
+  }
+
+  addThen(8, 9) {
+    println(_)
+  }
+
   println(d()(3))
+
+  class Money(val amount: Double) extends AnyVal
 
   var summation: Int = 0
   val someNumbers: List[Int] = List(-11, -10, -5, 0, 5, 10)
-  val accSum = summation += (_: Int)
+  val accSum: Int => Unit = summation += (_: Int)
 
   someNumbers.foreach(accSum)
   println(summation)
@@ -98,4 +109,8 @@ object MainApp extends App {
   val e2: Element = ae
   val e3: Element = new UniformElement('x', 2, 3)
 
+  abstract class Cat[-T, +U] {
+    def meow[W](volume: T, listener: Cat[U, T])
+      : Cat[Cat[U, T], U]
+  }
 }
