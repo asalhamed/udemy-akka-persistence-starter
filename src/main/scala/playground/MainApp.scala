@@ -98,4 +98,13 @@ object MainApp extends App {
   val e2: Element = ae
   val e3: Element = new UniformElement('x', 2, 3)
 
+  trait Combine[A] {
+    def combine(x: A, y: A): A
+  }
+
+  object Combine {
+    def apply[A](implicit combineA: Combine[A]): Combine[A] = combineA
+    implicit val combineInt: Combine[Int] = (x: Int, y: Int) => x + y
+    implicit val combineString: Combine[String] = (x: String, y: String) => x + y
+  }
 }
