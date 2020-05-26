@@ -19,6 +19,8 @@ object MainApp extends App {
     file
   }
 
+  ss foreach println
+
   val firstArg = if (args.length > 0) args(0) else ""
 
   val matchResult: Unit = firstArg match {
@@ -110,6 +112,15 @@ object MainApp extends App {
 
   abstract class Cat[-T, +U] {
     def meow[W](volume: T, listener: Cat[U, T]): Cat[Cat[U, T], U]
+  }
+  trait Combine[A] {
+    def combine(x: A, y: A): A
+  }
+
+  object Combine {
+    def apply[A](implicit combineA: Combine[A]): Combine[A] = combineA
+    implicit val combineInt: Combine[Int] = (x: Int, y: Int) => x + y
+    implicit val combineString: Combine[String] = (x: String, y: String) => x + y
   }
 
   def map: Vector[Int] => (Int => Int) => Vector[Int] =
