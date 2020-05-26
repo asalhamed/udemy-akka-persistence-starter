@@ -19,7 +19,6 @@ object MainApp extends App {
     file
   }
 
-
   val firstArg = if (args.length > 0) args(0) else ""
 
   val matchResult: Unit = firstArg match {
@@ -37,7 +36,7 @@ object MainApp extends App {
   val tp3 = b(3)(2)
 
   def addThen(x: Int, y: Int)(doThis: Int => Unit) = {
-    doThis(x+y)
+    doThis(x + y)
   }
 
   addThen(8, 9) {
@@ -110,7 +109,47 @@ object MainApp extends App {
   val e3: Element = new UniformElement('x', 2, 3)
 
   abstract class Cat[-T, +U] {
-    def meow[W](volume: T, listener: Cat[U, T])
-      : Cat[Cat[U, T], U]
+    def meow[W](volume: T, listener: Cat[U, T]): Cat[Cat[U, T], U]
   }
+
+  def map: Vector[Int] => (Int => Int) => Vector[Int] =
+    xs => f => xs.map(f)
+
+  val inputVector = Vector[Int](1, 3, 5)
+  val addSix: Vector[Int] => Vector[Int] = map(_)(_ + 6)
+  val mapResult = map(inputVector)(_ + 5)
+  val mapResult2 = addSix(inputVector)
+  mapResult foreach println
+  mapResult2 foreach println
+
+  class Person(val firstName: String, val lastName: String)
+      extends Ordered[Person] {
+    def compare(that: Person): Int = {
+      val lastNameComparison =
+        lastName.compareToIgnoreCase(that.lastName)
+      if (lastNameComparison != 0)
+        lastNameComparison
+      else
+        firstName.compareToIgnoreCase(that.firstName)
+    }
+    override def toString: String = firstName + " " + lastName
+  }
+
+  def orderedMergeSort[T <: Ordered[T]](xs: List[T]): List[T] = {
+    def merge(xs: List[T], ys: List[T]): List[T] =
+      (xs, ys) match {
+        case (Nil, _) => ys
+        case (_, Nil) => xs
+        case (x :: xs1, y :: ys1) =>
+          if (x < y) x :: merge(xs1, ys)
+          else y :: merge(xs, ys1)
+      }
+    val n = xs.length / 2
+    if (n == 0) xs
+    else {
+      val (ys, zs) = xs splitAt n
+      merge(orderedMergeSort(ys), orderedMergeSort(zs))
+    }
+  }
+
 }
