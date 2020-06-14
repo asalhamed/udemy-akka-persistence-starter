@@ -31,4 +31,6 @@ libraryDependencies ++= Seq(
 
   // Google Protocol Buffers
   "com.google.protobuf" % "protobuf-java"  % protobufVersion,
+
+  "org.scala-lang.modules" %% "scala-swing" % "2.1.1"
 )
